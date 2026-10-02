@@ -1,0 +1,57 @@
+Line 48
+
+ const url = new URL("https://geocoding-api.open-meteo.com/v1/search");
+  url.searchParams.set("name", query);
+  url.searchParams.set("count", "5");
+  url.searchParams.set("language", "en");
+  url.searchParams.set("format", "json");
+
+  let response;
+  try {
+    response = await fetch(url);
+  } catch {
+    throw new Error("Could not reach the city search service. Check your connection and try again.");
+  }
+
+  if (!response.ok) {
+    throw new Error(`City search failed (${response.status} ${response.statusText}).`);
+  }
+
+  const data = await response.json();
+  return data.results ?? [];
+}
+
+
+
+
+
+Next Line Parameter
+
+ const url = new URL("https://api.open-meteo.com/v1/forecast");
+  url.searchParams.set("latitude", location.latitude);
+  url.searchParams.set("longitude", location.longitude);
+  url.searchParams.set(
+    "current",
+    "temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code,is_day",
+  );
+  url.searchParams.set(
+    "daily",
+    "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max",
+  );
+  url.searchParams.set("timezone", "auto");
+  url.searchParams.set("forecast_days", "5");
+  url.searchParams.set("temperature_unit", "celsius");
+  url.searchParams.set("wind_speed_unit", "kmh");
+
+  let response;
+  try {
+    response = await fetch(url);
+  } catch {
+    throw new Error("Could not reach the weather service. Check your connection and try again.");
+  }
+
+  if (!response.ok) {
+    throw new Error(`Weather request failed for ${location.name} (${response.status} ${response.statusText}).`);
+  }
+
+  return response.json();
